@@ -67,7 +67,7 @@
 				<li class="active">View User</li>
 			</ol>
 		</div><!--/.row-->
-
+asd
 		<div class="row">
 			<div class="col-lg-12">
 				<h1 class="page-header">View User</h1>
