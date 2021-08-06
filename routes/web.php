@@ -78,6 +78,8 @@ Route::get('/admin/deletebook/{id}',[BookmanagmentController::class, 'destroy'])
 
 Route::get('/logout', function() {
     session()->forget('email');
+    session()->forget('role');
+    session()->forget('username');
     return redirect('');
 });
 
@@ -100,8 +102,28 @@ Route::get('/admin/deleteuser/{id}',[usermaster::class, 'destroy']);
 
 //user root
 
-Route::get('/user/dashboard', function () {
+Route::get('/user/dashboard2', function () {
 
+    if(session()->pull('role') == 2)
+    {
         return view('user.userdashboard');
+    }
+    elseif(session()->pull('role') == 1)
+    {
+        return view('admindashboard');
+    }
+    return view('/');
+});
 
+Route::get('/user/profile', function () {
+
+    if(session()->pull('role') == 2)
+    {
+        return view('user.userprofile');
+    }
+    elseif(session()->pull('role') == 1)
+    {
+        return view('admindashboard');
+    }
+    return view('/');
 });

@@ -7,6 +7,7 @@
 	<link href="http://127.0.0.1/demo/example-app/resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="http://127.0.0.1/demo/example-app/resources/css/datepicker3.css" rel="stylesheet">
 	<link href="http://127.0.0.1/demo/example-app/resources/css/styles.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -24,19 +25,33 @@
 					@endif --}}
 
 
+
+                    <div id="mydiv">
                     @if( gettype($errors) == 'object' )
 
                         @if(count($errors) > 0)
 
                             @foreach ($errors->all() as $error)
-                            <div class="alert bg-danger" role="alert">{{ $error }}</div>
+                            <div id="mydiv" class="alert bg-danger" role="alert">{{ $error }}</div>
 
                             @endforeach
                         @endif
                     @else
-                        <div class="alert bg-danger" role="alert">{{ $errors }}</div>
+                        <div id="mydiv" class="alert bg-danger" role="alert">{{ $errors }}</div>
                     @endif
+                    @if(Session::has('successs'))
+                    <div class="alert alert-success">
 
+                    <strong role="alert" class="">{!! Session::get('successs') !!}</strong>
+
+                    </div>
+                    @endif
+                </div>
+                    <script>
+
+                    $('#mydiv').delay(3500).hide(500);
+
+                    </script>
                     <form role="form" method="POST" action="/">
                         @csrf
 						<fieldset>

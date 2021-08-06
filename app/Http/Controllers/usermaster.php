@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class usermaster extends Controller
 {
+
+    public function profile(){
+        dd('hello');
+    }
+
     public function create(request $r){
 
         $this->validate($r,[
@@ -17,7 +22,7 @@ class usermaster extends Controller
             'cofirmpassword'=>  'required|min:5'
         ]);
 
-        $encrypt = Crypt::encryptString($r->password);
+        $encrypt = md5($r->password);
 
         if($r->input('password') == $r->input('cofirmpassword')){
             $user = new user();
@@ -32,7 +37,7 @@ class usermaster extends Controller
             $registermaster->role = 1;
             $registermaster->save();
 
-            return redirect('/');
+            return redirect('/')->with('successs','Sign In Successfully');
         }
         else{
             return redirect('/register/user')->with('errors','Confirm Password Wrong');

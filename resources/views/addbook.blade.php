@@ -11,6 +11,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -86,32 +87,32 @@
                         @csrf
                         <div class="form-group">
                             <label>Book Name</label>
-                            <input class="form-control" type="text" name="bookname" placeholder="Book Name">
+                            <input class="form-control" type="text" name="bookname" placeholder="Book Name" value="{{ old('bookname'); }}">
                             <span style="color: red">@error('bookname'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
                             <label>Category</label>
-                            <input class="form-control" type="text" name="bookcategory" placeholder="Category">
+                            <input class="form-control" type="text" name="bookcategory" placeholder="Category" value="{{ old('bookcategory'); }}">
                             <span style="color: red">@error('bookcategory'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
                             <label>Author</label>
-                            <input class="form-control" type="text" name="bookauthor" placeholder="Author">
+                            <input class="form-control" type="text" name="bookauthor" placeholder="Author" value="{{ old('bookauthor'); }}">
                             <span style="color: red">@error('bookauthor'){{ $message }}@enderror</span>
                         </div>
 
 
                         <div class="form-group">
                             <label>ISBN Number</label>
-                            <input class="form-control" type="number" name="bookisbn" placeholder="ISBN Number">
+                            <input class="form-control" type="number" name="bookisbn" placeholder="ISBN Number" value="{{ old('bookisbn'); }}">
                             <span style="color: red">@error('bookisbn'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
                             <label>Price</label>
-                            <input class="form-control" type="number" name="bookprice" placeholder="Price In INR">
+                            <input class="form-control" type="number" name="bookprice" placeholder="Price In INR" value="{{ old('bookprice'); }}">
                             <span style="color: red">@error('bookprice'){{ $message }}@enderror</span>
                         </div>
 
