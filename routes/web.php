@@ -95,3 +95,13 @@ Route::get('/admin/edituser/{id}',[usermaster::class, 'edit']);
 Route::post('/admin/updatuser/{id}',[usermaster::class, 'update']);
 
 Route::get('/admin/deleteuser/{id}',[usermaster::class, 'destroy']);
+
+
+
+//user root
+
+Route::get('/user/dashboard', function () {
+
+        return view('user.userdashboard');
+
+});

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\user;
 use Illuminate\Http\Request;
+use App\Models\registermaster;
+use Illuminate\Support\Facades\Crypt;
 
 class usermaster extends Controller
 {
@@ -15,12 +17,20 @@ class usermaster extends Controller
             'cofirmpassword'=>  'required|min:5'
         ]);
 
+        $encrypt = Crypt::encryptString($r->password);
+
         if($r->input('password') == $r->input('cofirmpassword')){
             $user = new user();
             $user->name = $r->name;
             $user->email = $r->email;
-            $user->password = $r->password;
+            $user->password = $encrypt;
             $user->save();
+
+            $registermaster = new registermaster();
+            $registermaster->username = $r->email;
+            $registermaster->password = $encrypt;
+            $registermaster->role = 1;
+            $registermaster->save();
 
             return redirect('/');
         }
