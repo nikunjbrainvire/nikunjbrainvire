@@ -19,8 +19,28 @@
 	<script src="js/respond.min.js"></script>
 	<![endif]-->
 </head>
+@date_default_timezone_set('Asia/Kolkata');
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    $(function(){
+    var dtToday = new Date();
+
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+
+    var minDate= year + '-' + month + '-' + day;
+
+    $('#txtDate').attr('min', minDate);
+});
+    </script>
 <body>
-@include('header');
+@include('header')
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
@@ -41,62 +61,64 @@
 		<div class="panel panel-container">
 			<div class="row">
                 <div class="col-md-3"></div>
+                @foreach ($editbook as $editbook)
 
-
+                {{-- @dd($editbook->name); --}}
                 <div class="col-md-5">
 
-                    <form method="POST" enctype="multipart/form-data" role="form" action="/admin/updatebook/{{ $editbook->id }}">
+                    <form method="POST" enctype="multipart/form-data" role="form">
                         @csrf
+
+                        <div class="form-group">
+
+                            <center>
+                                <label>Borrowed Book Details</label><br>
+                                <a data-fancybox="gallery" href="http://127.0.0.1/demo/example-app/storage/app/{{ $editbook->book_image }}"> <img height="100" src="http://127.0.0.1/demo/example-app/storage/app/{{ $editbook->book_image }}" /></a>
+                            </center>
+                        </div>
+
                         <div class="form-group">
                             <label>Book Name</label>
-                            <input class="form-control" type="text" name="bookname" placeholder="Book Name" value="{{ $editbook->book_name }}">
-                            <span style="color: red">@error('bookname'){{ $message }}@enderror</span>
+                            <input class="form-control" type="text" name="bookname" placeholder="Book Name" value="{{ $editbook->book_name }}" disabled>
                         </div>
 
                         <div class="form-group">
                             <label>Category</label>
-                            <input class="form-control" type="text" name="bookcategory" placeholder="Category" value="{{ $editbook->book_Category }}">
+                            <input class="form-control" type="text" name="bookcategory" placeholder="Category" value="{{ $editbook->book_Category }}" disabled>
                             <span style="color: red">@error('bookcategory'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
-                            <label>Author</label>
-                            <input class="form-control" type="text" name="bookauthor" placeholder="Author" value="{{ $editbook->book_Author }}">
+                            <label>Borrowed Date</label>
+                            <input class="form-control" type="text" name="bookauthor" placeholder="Author" value="{{ $editbook->updated_at }}" disabled>
                             <span style="color: red">@error('bookauthor'){{ $message }}@enderror</span>
                         </div>
 
 
                         <div class="form-group">
-                            <label>ISBN Number</label>
-                            <input class="form-control" type="number" name="bookisbn" placeholder="Author" value="{{ $editbook->book_isbn }}">
+                            <label>Person Name</label>
+                            <input class="form-control" type="text" name="bookisbn" placeholder="Author" value="{{ $editbook->name }}" disabled>
                             <span style="color: red">@error('bookisbn'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
-                            <label>Quantity</label>
-                            <input class="form-control" type="number" name="bookquantity" placeholder="Quantity" value="{{ $editbook->book_quantity }}">
+                            <label>Email Id</label>
+                            <input class="form-control" type="text" name="bookquantity" placeholder="Quantity" value="{{ $editbook->email }}" disabled>
                             <span style="color: red">@error('bookquantity'){{ $message }}@enderror</span>
                         </div>
 
                         <div class="form-group">
-                            <label>Price</label>
-                            <input class="form-control" type="number" name="bookprice" placeholder="Author" value="{{ $editbook->book_price }}">
-                            <span style="color: red">@error('bookprice'){{ $message }}@enderror</span>
+                            <label>Return Book Date</label>
+                                <input class="form-control" type="date" name="returnbook" placeholder="Author" id="txtDate" value=""  >
+                            <span style="color: red">@error('returnbook'){{ $message }}@enderror</span>
                         </div>
 
-                        <div class="form-group">
-                            <label>Image</label>
-                            <input type="file" name="file" class="form-control">
 
-                            <span style="color: red">@error('file'){{ $message }}@enderror</span>
-                            <center>
-                                <label>Old Image</label><br>
-                                <a data-fancybox="gallery" href="http://127.0.0.1/demo/example-app/storage/app/{{ $editbook->book_image }}"> <img height="100" src="http://127.0.0.1/demo/example-app/storage/app/{{ $editbook->book_image }}" /></a>
-                            </center>
-                        </div>
 
                         <input type="submit" class="btn btn-primary form-control">
                     </form>
+                    @endforeach
+
                 </div>
 
 

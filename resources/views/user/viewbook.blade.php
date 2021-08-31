@@ -18,6 +18,35 @@
 </head>
 <body>
 @include('header');
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-userpic">
+            <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+        </div>
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">{{ Session::get('username'); }}</div>
+            <div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
+    <form role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+    <ul class="nav menu">
+        <li ><a href="/user/dashboard2"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
+
+        <li class="active" ><a href="/user/viewbook"><em class="fa fa-navicon">&nbsp;</em> Books</a></li>
+        <li> <a href="/user/profile"><em class="fa fa-navicon">&nbsp;</em> My profile</a></li>
+        <li><a href="/user/vieworder"><em class="fa fa-navicon">&nbsp;</em> My Orders</a></li>
+        <li><a href="/user/viewcart"><em class="fa fa-navicon">&nbsp;</em>Add To Cart</a></li>
+        <li><a href="/user/changepassword"><em class="fa fa-navicon">&nbsp;</em> Change Password</a></li>
+        <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+    </ul>
+</div><!--/.sidebar-->
+</div><!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
@@ -25,13 +54,13 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">Update Book</li>
+				<li class="active">View Book</li>
 			</ol>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Update Book</h1>
+				<h1 class="page-header">View Book</h1>
 			</div>
 		</div><!--/.row-->
         @if (gettype($errors) != 'object')
@@ -51,10 +80,8 @@
 
                         <div style="float: left;">
                             <select name="id" class="form-control">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
                             </select>
                         </div>
 
@@ -65,7 +92,7 @@
                     </form>
 
                     <div class="panel-body">
-                    <table class="table table-bordered table-hover ">
+                    {{-- <table class="table table-bordered table-hover ">
                     <tr style="font-weight: bold;" align="center" >
                         <td>Id</td>
                         <td>Book Name</td>
@@ -73,17 +100,56 @@
                         <td>Book Author</td>
                         <td>Book ISBN</td>
                         <td>Book Price</td>
-                        <td>Book Quantity</td>
                         <td>Book Image</td>
                         <td>Action</td>
                     </tr>
-
+                    </table> --}}
+                    <div class="container">
+                        <div class="row test" style="border: solid 1px;"><br>
                     @php
                     $id=1;
                     @endphp
+
+                    {{-- @dd($data->orders_id); --}}
                     @foreach ($data as $datas)
 
 
+                    <div class="col-md-2" >
+                        <center>
+
+                        <img height="80" src="{{ 'http://127.0.0.1/demo/example-app/storage/app/'.$datas['book_image'] }}"></img>
+                        <h5>{{ $datas['book_name'] }}</h5>
+                        <h5>Price :- {{ $datas['book_price'] }}</h5>
+                        <h5>Quantity :- {{ $datas['book_quantity'] }}</h5>
+                        <form action="/user/viewbook" method="POST">
+                            @csrf
+                                <input type="hidden" name="quantity" value="{{ $datas['book_quantity']  }}" />
+                                @php $s = "".$datas['id'].""; @endphp
+
+                                @if($datas['book_quantity'] == 0)
+                                <a href="#" class="btn btn-danger" name="addtocart" style="margin-bottom:3px;">Out Of stock</a>
+
+                                @elseif (in_array($s, Session::get('orders'), TRUE))
+
+                                <a href="#" class="btn btn-danger" name="addtocart" style="margin-bottom:3px;">Book Already Borrowed</a>
+
+                                @elseif(in_array($s, Session::get('carts'), TRUE))
+
+                                <a href="#" class="btn btn-danger" name="addtocart" style="margin-bottom:3px;">Already add In card</a>
+
+                                @else
+
+                                <button type="submit" class="btn btn-primary" name="addtocart" value="{{ $datas['id'] }}" style="margin-bottom:3px;">Add to Cart</button>
+
+                                @endif
+
+
+                        {{-- <button type="submit" class="btn btn-danger" name="ordernow" value="{{ $datas['id'] }}" style="margin-bottom:10px;">Order Now</button> --}}
+                        </form>
+                        </center>
+                    </div>
+
+{{--
                     <tr align="center">
                         <td>{{ $id }}</td>
                         <td>{{ $datas['book_name'] }}</td>
@@ -91,15 +157,21 @@
                         <td>{{ $datas['book_Author'] }}</td>
                         <td>{{ $datas['book_isbn'] }}</td>
                         <td>{{ $datas['book_price'] }}</td>
-                        <td>{{ $datas['book_quantity'] }}</td>
                         <td> <a data-fancybox="gallery" href="{{ 'http://127.0.0.1/demo/example-app/storage/app/'.$datas['book_image'] }}"> <img height="80" src="{{ 'http://127.0.0.1/demo/example-app/storage/app/'.$datas['book_image'] }}"></img></a></td>
                         <td><a href="/admin/editbook/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> <a href="/admin/deletebook/{{ $datas['id'] }}" class="btn btn-danger">Delete</a></td>
-                    </tr>
+                    </tr> --}}
                     @php
                     $id++;
                     @endphp
                     @endforeach
-                </table>
+                {{-- </table> --}}
+                    </div>
+
+
+
+
+
+                        </div>
                     </div>
 
 

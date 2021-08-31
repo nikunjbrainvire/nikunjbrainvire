@@ -11,6 +11,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -19,27 +20,31 @@
 <body>
 @include('header');
 
-
-
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">View User</li>
+				<li class="active">Export By User</li>
 			</ol>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">View User</h1>
+				<h1 class="page-header">Export By User</h1>
 			</div>
 		</div><!--/.row-->
+<div id="mydiv">
         @if (gettype($errors) != 'object')
-        <div class="alert bg-success" style="color:black;" role="alert">{{ $errors }}</div>
+        <div class="alert bg-danger" role="alert">{{ $errors }}</div>
         @endif
+</div>
+        <script>
 
+            $('#mydiv').delay(3500).hide(500);
+
+            </script>
 
 		<div class="panel panel-container">
 			<div class="row">
@@ -81,7 +86,7 @@
                         <td>{{ $id }}</td>
                         <td>{{ $datas['name'] }}</td>
                         <td>{{ $datas['email'] }}</td>
-                        <td><a href="/admin/edituser/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> <a href="/admin/deleteuser/{{ $datas['id'] }}" class="btn btn-danger">Block</a></td>
+                        <td><a href="/admin/downloadexcel/{{ $datas['id'] }}" class="btn btn-success">Export Orders</a></td>
                     </tr>
                     @php
                     $id++;
@@ -98,7 +103,7 @@
 
 
                       <li class="page-item" ><a class="page-link"  href="{{ $link }}">{{ $linknum }}</a></li>
-                    @php $linknum=2; @endphp
+                    @php $linknum+=1; @endphp
 
 
                 @endforeach

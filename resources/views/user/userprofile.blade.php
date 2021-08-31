@@ -19,7 +19,34 @@
 </head>
 <body>
 @include('header');
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-userpic">
+            <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+        </div>
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">{{ Session::get('username'); }}</div>
+            <div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
+    <form role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+    <ul class="nav menu">
+        <li ><a href="/user/dashboard2"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
 
+        <li><a href="/user/viewbook"><em class="fa fa-navicon">&nbsp;</em> Books</a></li>
+        <li class="active" > <a href="/user/profile"><em class="fa fa-navicon">&nbsp;</em> My profile</a></li>
+        <li><a href="/user/vieworder"><em class="fa fa-navicon">&nbsp;</em> My Orders</a></li>
+        <li><a href="/user/viewcart"><em class="fa fa-navicon">&nbsp;</em>Add To Cart</a></li>
+        <li><a href="/user/changepassword"><em class="fa fa-navicon">&nbsp;</em> Change Password</a></li>
+        <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+    </ul>
+</div><!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
@@ -27,13 +54,13 @@
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">Change Password</li>
+				<li class="active">My Profile</li>
 			</ol>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Change Password</h1>
+				<h1 class="page-header">My Profile</h1>
 			</div>
 		</div><!--/.row-->
 
@@ -73,21 +100,27 @@
 		<div class="panel panel-container">
 			<div class="row">
                 <div class="col-md-5 ">
-                    <form class="form-group panel-body" method="POST" action="{{ route('admin.changePassword') }}">
+                    <form class="form-group panel-body" method="POST" action="/user/profile">
                         @csrf
                         <div class="form-group">
-                            <label>Old Password</label>
-                            <input class="form-control" type="password" name="oldpass" placeholder="Old Password">
+                            <label>Name</label>
+                            <input class="form-control" type="text" value="@if(old('name')) {{ old('name') }} @else {{ $user->name }}@endif" name="name" placeholder="Old Password">
                             {{-- <span style="color: red">@error('oldpass'){{ $message }}@enderror</span> --}}
                         </div>
                         <div class="form-group">
-                            <label>New Password</label>
-                            <input class="form-control" type="password" name="newpass" placeholder="New Password">
+                            <label>Email Id</label>
+                            <input class="form-control" type="email" value="@if(old('email')) {{ old('email') }} @else {{ $user->email }}@endif" name="email" placeholder="New Password" disabled>
                             {{-- <span style="color: red">@error('newpass'){{ $message }}@enderror</span> --}}
                         </div>
                         <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input class="form-control" type="password" name="confirmpass" placeholder="Confirm Password">
+                            <label>Gender</label><br>
+                            <input class="" type="radio" value="1" name="gender" @if(old('gender')) @if(old('gender') == 1) Checked @endif @elseif ($user->gender == 1) checked @endif >Male
+                            <input class="" type="radio" value="2" name="gender" @if(old('gender')) @if(old('gender') == 2) Checked @endif @elseif ($user->gender == 2) checked @endif >female
+                            {{-- <span style="color: red">@error('newpass'){{ $message }}@enderror</span> --}}
+                        </div>
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea class="form-control" type="password" name="address" placeholder="Address">@if(old('address')){{ old('address') }}@else{{ $user->address }}@endif</textarea>
                             {{-- <span style="color: red">@error('confirmpass'){{ $message }}@enderror</span> --}}
                         </div>
 

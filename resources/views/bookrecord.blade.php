@@ -11,6 +11,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -20,31 +21,48 @@
 @include('header');
 
 
-
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">View User</li>
+				<li class="active">Book Record</li>
 			</ol>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">View User</h1>
+				<h1 class="page-header">Book Record</h1>
 			</div>
 		</div><!--/.row-->
         @if (gettype($errors) != 'object')
         <div class="alert bg-success" style="color:black;" role="alert">{{ $errors }}</div>
         @endif
+        <div id="mydiv">
+        @if(Session::has('success'))
+        <div class="alert alert-success">
 
+        <strong role="alert" class="">{!! Session::get('success') !!}</strong>
+
+        </div>
+
+        @endif
+    </div>
+        <script>
+
+            $('#mydiv').delay(3500).hide(500);
+
+        </script>
 
 		<div class="panel panel-container">
 			<div class="row">
 
                 <div class="col-md-12">
+
+
+
+
                     <form method="get"  class="panel-body">
 
                         <div style="float: left;">
@@ -66,10 +84,18 @@
                     <table class="table table-bordered table-hover ">
                     <tr style="font-weight: bold;" align="center" >
                         <td>Id</td>
-                        <td>Name</td>
+                        <td>Book Name</td>
+                        <td>Book Category</td>
+                        <td>Book Author</td>
+                        <td>Borrowed Person Name</td>
                         <td>Email</td>
+                        <td>Borrowed Book</td>
+                        <td>Return Book</td>
+                        {{-- <td>Book Quantity</td> --}}
+                        <td>Book Image</td>
                         <td>Action</td>
                     </tr>
+
 
                     @php
                     $id=1;
@@ -79,9 +105,16 @@
 
                     <tr align="center">
                         <td>{{ $id }}</td>
-                        <td>{{ $datas['name'] }}</td>
-                        <td>{{ $datas['email'] }}</td>
-                        <td><a href="/admin/edituser/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> <a href="/admin/deleteuser/{{ $datas['id'] }}" class="btn btn-danger">Block</a></td>
+                        <td>{{ $datas->book_name }}</td>
+                        <td>{{ $datas->book_Category }}</td>
+                        <td>{{ $datas->book_Author }}</td>
+                        <td>{{ $datas->name }}</td>
+                        <td>{{ $datas->email }}</td>
+                        <td>{{ $datas->created_at }}</td>
+                        <td>{{ $datas->returnbook_date }}</td>
+                        {{-- <td>{{ $datas->book_quantity }}</td> --}}
+                        <td> <a data-fancybox="gallery" href="{{ 'http://127.0.0.1/demo/example-app/storage/app/'.$datas->book_image }}"> <img height="80" src="{{ 'http://127.0.0.1/demo/example-app/storage/app/'.$datas->book_image }}"></img></a></td>
+                        <td><a href="/admin/editrecord/{{ $datas->id }}" class="btn btn-primary" ><i class="fa fa-pencil-square-o" aria-hidden="true" ></i> Return</a> </td>
                     </tr>
                     @php
                     $id++;
@@ -94,11 +127,12 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination panel-body">
                 @php $linknum = 1; @endphp
+                {{ $data->withQueryString()->links() }}
                 @foreach ($data->links()->elements[0] as $link)
 
 
                       <li class="page-item" ><a class="page-link"  href="{{ $link }}">{{ $linknum }}</a></li>
-                    @php $linknum=2; @endphp
+                    @php $linknum++; @endphp
 
 
                 @endforeach
@@ -121,6 +155,8 @@
 	<script src="http://127.0.0.1/demo/example-app/resources/js/bootstrap-datepicker.js"></script>
 	<script src="http://127.0.0.1/demo/example-app/resources/js/custom.js"></script>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
 	<script>
 		window.onload = function () {
 	var chart1 = document.getElementById("line-chart").getContext("2d");

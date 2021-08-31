@@ -26,17 +26,21 @@ class RegisterController extends Controller
 
 
         $result = registermaster::where(['username'=> $r->input('email'),'password' => $encrypt])->first();
-        $userresult = user::where(['email'=> $r->input('email'),'password' => $encrypt])->first();
+
 
         if($result){
             $r->session()->put('email',$r->input('email'));
             $r->session()->put('role',$result->role);
-            $r->session()->put('username',$userresult->name);
+
             if($result->role == 2){
                 // Cookie::make('name', $r->input('email'), 15);
                 return redirect('/admin/dashboard');
             }
             elseif($result->role == 1){
+
+                $userresult = user::where(['email'=> $r->input('email')])->first();
+                $r->session()->put('username',$userresult->name);
+                $r->session()->put('useid',$userresult->id);
 
                 return redirect('/user/dashboard2');
             }

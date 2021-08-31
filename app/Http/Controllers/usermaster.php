@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 use App\Models\user;
 use Illuminate\Http\Request;
 use App\Models\registermaster;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Crypt;
 
 class usermaster extends Controller
 {
 
-    public function profile(){
-        dd('hello');
+    public function profile(request $r ){
+        $email = $r->session()->get('email');
+
+
+        // $registermaster = registermaster::where('username',$email)->first();
+        $user = user::where('email',$email)->first();
+        // dd($user->name);
+
+        return view('user.userprofile',['user'=>$user]);
     }
 
     public function create(request $r){
@@ -92,10 +100,64 @@ class usermaster extends Controller
 
     }
 
-    public function destroy($id)
-    {
-        user::find($id)->delete();
-        return redirect("/admin/viewuser")->with('errors','Data Delete Successfully');
+    public function updateprofile(request $r){
+
+        $this->validate($r,[
+            'name'  =>  'required',
+            'gender'  =>  'required',
+            'address'  =>  'required'
+        ]);
+
+        $email = $r->session()->get('email');
+
+        user::where('email',$email)->update([
+            'name'     => $r->name,
+            'gender' => $r->gender,
+            'address' => $r->address
+        ]);
+
+        return redirect("/user/profile")->with('success','Profile Update Successfully');
+
     }
+
+    public function changepass(request $r)
+    {
+        $this->validate($r,[
+            'oldpass'     =>  'required',
+            'newpass'     =>  'required|min:5',
+            'confirmpass' =>  'required|min:5'
+        ]);
+
+        $email = $r->session()->get('email');
+        $password = md5($r->input('oldpass'));
+
+        $result = registermaster::where(['username' => $email, 'password' => $password] )->first();
+
+        if($result){
+
+            if($r->input('newpass') == $r->input('confirmpass'))
+            {
+
+                $encrypt = md5($r->input('confirmpass'));
+
+                registermaster::where(['username' => $email, 'password' => $password] )->update([
+                    'password'=> $encrypt
+                ]);
+
+                // dd(registermaster::where('password',$r->input('oldpass'))->update(['password'=> $r->input('confirmpass')],['username'=> 'admin@admin']));
+
+                return redirect('/user/changepassword')->with('success','Change Password SuccessFully');
+            }
+            else{
+                return redirect('/user/changepassword')->with('errors','Invalid Confirm Password');
+            }
+        }else{
+            return redirect('/user/changepassword')->with('errors','Old Password Is Invalid');
+        }
+        return $r->input();
+    }
+
+
+
 
 }

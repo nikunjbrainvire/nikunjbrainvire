@@ -11,6 +11,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -20,60 +21,71 @@
 @include('header');
 
 
-
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">View User</li>
+				<li class="active"> Export By Date
+                </li>
 			</ol>
 		</div><!--/.row-->
 
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">View User</h1>
+				<h1 class="page-header"> Export By Date
+                </h1>
 			</div>
 		</div><!--/.row-->
+<div id="mydiv">
         @if (gettype($errors) != 'object')
-        <div class="alert bg-success" style="color:black;" role="alert">{{ $errors }}</div>
+        <div class="alert bg-danger" role="alert">{{ $errors }}</div>
         @endif
+</div>
+        <script>
 
+            $('#mydiv').delay(3500).hide(500);
+
+            </script>
 
 		<div class="panel panel-container">
 			<div class="row">
 
                 <div class="col-md-12">
-                    <form method="get"  class="panel-body">
-
-                        <div style="float: left;">
+                    <form method="post" class="panel-body">
+                        @csrf
+                        {{-- <div style="float: left;">
                             <select name="id" class="form-control">
                                 <option value="5">5</option>
                                 <option value="10">10</option>
                                 <option value="20">20</option>
                                 <option value="50">50</option>
                             </select>
-                        </div>
+                        </div> --}}
+                        {{-- <input type="date" name="startdate"> --}}
+                        <div style="float: center;">
+                            Date From :- <input type="date" name="startdate">
+                            Date To :- <input type="date" name="enddate">
 
-                        <div style="float: right;">
-                            <input type="text" name="search" class="">
-                            <input type="submit" >
+                            {{-- <input type="text" name="search" class=""> --}}
+                            <input type="submit" value="submit" value="submit" >
                         </div>
                     </form>
 
                     <div class="panel-body">
                     <table class="table table-bordered table-hover ">
-                    <tr style="font-weight: bold;" align="center" >
+                    {{-- <tr style="font-weight: bold;" align="center" >
                         <td>Id</td>
                         <td>Name</td>
                         <td>Email</td>
                         <td>Action</td>
-                    </tr>
+                    </tr> --}}
 
                     @php
                     $id=1;
                     @endphp
+                    @if(Session::has('data'))
                     @foreach ($data as $datas)
 
 
@@ -81,7 +93,7 @@
                         <td>{{ $id }}</td>
                         <td>{{ $datas['name'] }}</td>
                         <td>{{ $datas['email'] }}</td>
-                        <td><a href="/admin/edituser/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> <a href="/admin/deleteuser/{{ $datas['id'] }}" class="btn btn-danger">Block</a></td>
+                        <td><a href="/admin/downloadexcel/{{ $datas['id'] }}" class="btn btn-success">Export Orders</a></td>
                     </tr>
                     @php
                     $id++;
@@ -98,10 +110,11 @@
 
 
                       <li class="page-item" ><a class="page-link"  href="{{ $link }}">{{ $linknum }}</a></li>
-                    @php $linknum=2; @endphp
+                    @php $linknum+=1; @endphp
 
 
                 @endforeach
+                @endif
 
             </ul>
         </nav>

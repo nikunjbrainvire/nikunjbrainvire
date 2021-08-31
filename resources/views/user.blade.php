@@ -7,6 +7,7 @@
 	<link href="http://127.0.0.1/demo/example-app/resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="http://127.0.0.1/demo/example-app/resources/css/datepicker3.css" rel="stylesheet">
 	<link href="http://127.0.0.1/demo/example-app/resources/css/styles.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -23,7 +24,7 @@
 					<div class="alert bg-danger" role="alert"><em class="fa fa-lg fa-warning">&nbsp;</em> {{ $msg }}<a href="#" class="pull-right"><em class="fa fa-lg fa-close"></em></a></div>
 					@endif --}}
 
-
+<div id="mydiv">
                     @if( gettype($errors) == 'object' )
 
                         @if(count($errors) > 0)
@@ -36,15 +37,20 @@
                     @else
                         <div class="alert bg-danger" role="alert">{{ $errors }}</div>
                     @endif
+</div>
+                    <script>
 
+                        $('#mydiv').delay(3500).hide(500);
+
+                        </script>
                     <form role="form" method="POST" action="/register/user">
                         @csrf
 						<fieldset>
                             <div class="form-group">
-								<input class="form-control" placeholder="Name" name="name" type="text" autofocus="">
+								<input class="form-control" placeholder="Name" name="name" type="text" value="{{ old('name'); }}" autofocus="">
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+								<input class="form-control" placeholder="E-mail" name="email" type="email" value="{{ old('email'); }}" autofocus="">
 							</div>
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" type="password" value="">

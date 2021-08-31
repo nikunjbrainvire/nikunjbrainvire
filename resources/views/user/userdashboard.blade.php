@@ -35,15 +35,16 @@
 				<input type="text" class="form-control" placeholder="Search">
 			</div>
 		</form>
-		<ul class="nav menu">
-			<li class="active"><a href="#"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
+        <ul class="nav menu">
+            <li class="active"><a href="/user/dashboard2"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
 
-            <li><a href="/admin/viewuser"><em class="fa fa-navicon">&nbsp;</em> Books</a></li>
-            <li><a href="/user/profile"><em class="fa fa-navicon">&nbsp;</em> My profile</a></li>
-            <li><a href="/admin/viewuser"><em class="fa fa-navicon">&nbsp;</em> My Orders</a></li>
-            <li><a href="/admin/changepassword"><em class="fa fa-navicon">&nbsp;</em> Change Password</a></li>
-			<li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
-		</ul>
+            <li><a href="/user/viewbook"><em class="fa fa-navicon">&nbsp;</em> Books</a></li>
+            <li> <a href="/user/profile"><em class="fa fa-navicon">&nbsp;</em> My profile</a></li>
+            <li><a href="/user/vieworder"><em class="fa fa-navicon">&nbsp;</em> My Orders</a></li>
+            <li><a href="/user/viewcart"><em class="fa fa-navicon">&nbsp;</em>Add To Cart</a></li>
+            <li><a href="/user/changepassword"><em class="fa fa-navicon">&nbsp;</em> Change Password</a></li>
+            <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+        </ul>
 	</div><!--/.sidebar-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
