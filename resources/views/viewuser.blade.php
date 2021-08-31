@@ -81,7 +81,7 @@
                         <td>{{ $id }}</td>
                         <td>{{ $datas['name'] }}</td>
                         <td>{{ $datas['email'] }}</td>
-                        <td><a href="/admin/edituser/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> <a href="/admin/deleteuser/{{ $datas['id'] }}" class="btn btn-danger">Block</a></td>
+                        <td><a href="/admin/edituser/{{ $datas['id'] }}" class="btn btn-primary">Edit</a> </td>
                     </tr>
                     @php
                     $id++;

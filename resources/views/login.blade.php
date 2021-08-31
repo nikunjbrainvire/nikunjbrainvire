@@ -61,11 +61,11 @@
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" type="password" value="">
 							</div>
-							<div class="checkbox">
+							{{-- <div class="checkbox">
 								<label>
 									<input name="remember" type="checkbox" value="Remember Me">Remember Me
 								</label>
-							</div>
+							</div> --}}
 							<input type="submit" value="submit" class="btn btn-primary"></fieldset>
 					</form>
 				</div>

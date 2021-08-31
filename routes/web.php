@@ -154,7 +154,7 @@ Route::post('/user/viewbook',[CartController::class, 'useractionshow']);
 Route::get('/user/deletecart/{id}',[CartController::class, 'deletecart']);
 
 
-Route::post('/user/changepassword',[book::class, 'changepass'])->name('user.changePassword');
+Route::post('/user/changepassword',[usermaster::class, 'changepass'])->name('user.changePassword');
 
 
 

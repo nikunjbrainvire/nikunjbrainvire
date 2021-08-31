@@ -106,6 +106,8 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination panel-body">
                 @php $linknum = 1; @endphp
+                {{ $data->withQueryString()->links() }}
+
                 @foreach ($data->links()->elements[0] as $link)
 
 

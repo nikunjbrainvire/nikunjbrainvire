@@ -36,7 +36,7 @@ class usermaster extends Controller
             $user = new user();
             $user->name = $r->name;
             $user->email = $r->email;
-            $user->password = $encrypt;
+            $user->password = "null";
             $user->save();
 
             $registermaster = new registermaster();
@@ -155,6 +155,10 @@ class usermaster extends Controller
             return redirect('/user/changepassword')->with('errors','Old Password Is Invalid');
         }
         return $r->input();
+    }
+
+    public function apitest(){
+        return User::all();
     }
 
 

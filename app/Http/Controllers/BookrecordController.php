@@ -121,6 +121,13 @@ class BookrecordController extends Controller
             'returnbook_date' => $request->returnbook
         ]);
 
+        // dd($request->quantity);
+
+        bookmanagment::where('id',$request->upid)->update([
+            'book_quantity' => $request->quantity+1
+        ]);
+
+
         return redirect("/admin/record")->with('success','Returndate Insert Successfully');
 
     }

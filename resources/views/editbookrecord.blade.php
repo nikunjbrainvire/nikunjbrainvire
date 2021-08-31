@@ -106,6 +106,8 @@
                             <input class="form-control" type="text" name="bookquantity" placeholder="Quantity" value="{{ $editbook->email }}" disabled>
                             <span style="color: red">@error('bookquantity'){{ $message }}@enderror</span>
                         </div>
+                        <input class="form-control" type="hidden" name="quantity" placeholder="Quantity" value="{{ $editbook->book_quantity }}" hidden>
+                        <input class="form-control" type="hidden" name="upid" placeholder="Quantity" value="{{ $editbook->book_id }}" hidden>
 
                         <div class="form-group">
                             <label>Return Book Date</label>
