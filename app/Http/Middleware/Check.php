@@ -20,10 +20,10 @@ class Check
     {
 
 
-        echo "<script>alert('asd');</script>";
+        // echo "<script>alert('asd');</script>";
                 if(session::has('role'))
                 {
-                    echo "<script>alert('2');</script>";
+                    // echo "<script>alert('2');</script>";
 
                     if(Session::get('role') == 2)
                     {

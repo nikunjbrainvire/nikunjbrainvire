@@ -11,6 +11,7 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<!--[if lt IE 9]>
 	<script src="js/html5shiv.js"></script>
 	<script src="js/respond.min.js"></script>
@@ -67,6 +68,18 @@
         <div class="alert bg-success" style="color:black;" role="alert">{{ $errors }}</div>
         @endif
 
+        @if(Session::has('success'))
+        <div class="alert alert-danger" id='mydiv'>
+
+        <strong role="alert" class="">{!! Session::get('success') !!}</strong>
+        </div>
+        @endif
+
+        <script>
+
+            $('#mydiv').delay(3500).hide(500);
+
+        </script>
 
 		<div class="panel panel-container">
 			<div class="row">
@@ -124,7 +137,7 @@
                         <form action="/user/viewbook" method="POST">
                             @csrf
                                 <input type="hidden" name="quantity" value="{{ $datas['book_quantity']  }}" />
-                                @php $s = "".$datas['id'].""; @endphp
+                                {{-- @php $s = "".$datas['id'].""; @endphp
 
                                 @if($datas['book_quantity'] == 0)
                                 <a href="#" class="btn btn-danger" name="addtocart" style="margin-bottom:3px;">Out Of stock</a>
@@ -137,11 +150,11 @@
 
                                 <a href="#" class="btn btn-danger" name="addtocart" style="margin-bottom:3px;">Already add In card</a>
 
-                                @else
+                                @else --}}
 
                                 <button type="submit" class="btn btn-primary" name="addtocart" value="{{ $datas['id'] }}" style="margin-bottom:3px;">Add to Cart</button>
 
-                                @endif
+
 
 
                         {{-- <button type="submit" class="btn btn-danger" name="ordernow" value="{{ $datas['id'] }}" style="margin-bottom:10px;">Order Now</button> --}}

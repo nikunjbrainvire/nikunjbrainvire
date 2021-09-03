@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class usermaster extends Controller
 {
+    public function __construct(user $user,registermaster $register)
+    {
+        $this->user = $user;
+        $this->register = $register;
+    }
 
     public function profile(request $r ){
         $email = $r->session()->get('email');
@@ -55,20 +60,19 @@ class usermaster extends Controller
 
     public function show(Request $r)
     {
-        if(isset($r->search) or isset($r->id)){
-            $search = $r->search;
-            $data = user::where('name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->paginate($r->id);
 
-        } else {
-            $data = user::paginate(5);
-        }
+        $data = $this->user->show($r->input());
+
+
 
         return view('viewuser',['data'=>$data]);
     }
 
     public function edit($id)
     {
-        $edituser = user::where('id',$id)->first();
+
+        $edituser = $this->user->edit($id);
+
 
         return view('edituser',['editbook'=>$edituser]);
     }
@@ -87,11 +91,9 @@ class usermaster extends Controller
         if($request->input('password') == $request->input('cofirmpassword'))
         {
 
-            user::where('id',$id)->update([
-                'name'     => $request->name,
-                'email' => $request->email,
-                'password' => $request->password
-            ]);
+            $this->user->userupdate($request->input(),$id);
+
+
         }else{
             return redirect('admin/edituser/'.$id)->with('errors','Invalid Confirm Password');
         }
@@ -131,7 +133,8 @@ class usermaster extends Controller
         $email = $r->session()->get('email');
         $password = md5($r->input('oldpass'));
 
-        $result = registermaster::where(['username' => $email, 'password' => $password] )->first();
+
+        $result =  $this->register->userchangepass($email,$password);
 
         if($result){
 
@@ -139,12 +142,7 @@ class usermaster extends Controller
             {
 
                 $encrypt = md5($r->input('confirmpass'));
-
-                registermaster::where(['username' => $email, 'password' => $password] )->update([
-                    'password'=> $encrypt
-                ]);
-
-                // dd(registermaster::where('password',$r->input('oldpass'))->update(['password'=> $r->input('confirmpass')],['username'=> 'admin@admin']));
+                $this->register->updateuserpassword($email,$password,$encrypt);
 
                 return redirect('/user/changepassword')->with('success','Change Password SuccessFully');
             }
@@ -160,7 +158,6 @@ class usermaster extends Controller
     public function apitest(){
         return User::all();
     }
-
 
 
 

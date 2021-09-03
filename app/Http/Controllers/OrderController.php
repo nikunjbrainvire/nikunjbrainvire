@@ -16,114 +16,31 @@ use PDF;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct(order $order,cart $cart)
     {
-        //
+        $this->order = $order;
+        $this->cart = $cart;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\order  $order
-     * @return \Illuminate\Http\Response
-     */
     public function show()
     {
         $id=Session::get('useid');
 
-        // $r->session()->get('addtocart');
-        // $data = bookmanagment::where(['id' => Session::get('addtocart')])->first();
 
-        $users = DB::table('orders')
-            ->join('bookmanagments', 'orders.book_id', '=', 'bookmanagments.id')
-            ->select('bookmanagments.*')
-            ->where('orders.user_id',$id)
-            ->get();
+        $users  = $this->order->userorder($id);
+
 
 
 
         return view('user.vieworder',['data'=>$users]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\order  $order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(order $order)
-    {
-        //
-    }
-
-
 
     public function getordernow(Request $r){
 
         $id=Session::get('useid');
-        $r->session()->get('addtocart');
-        $data = bookmanagment::where(['id' => $r->session()->get('addtocart')])->first();
 
-        $users = DB::table('carts')
-            ->join('bookmanagments', 'carts.book_id', '=', 'bookmanagments.id')
-            ->select('bookmanagments.*')
-            ->where('carts.user_id',$id)
-            ->get();
-
-// dd($data->book_name);
-        // dd($r->session()->get('quantity'));
-
-
-
+        $users = $this->cart->getordernow($r->input(),$id);
 
         return view('user.ordernow',['data'=>$users]);
 
@@ -137,32 +54,12 @@ class OrderController extends Controller
             'payment'  =>  'required'
         ]);
 
+
         $user_id = $r->session()->get('useid');
-        $allcart = Cart::where('user_id',$user_id)->get();
+        $users = $this->cart->ordernow($r->input(),$user_id);
 
 
-        foreach($allcart as $cart)
-        {
 
-        $order = new order();
-        $order->book_id = $cart['book_id'];
-        $order->user_id = $cart['user_id'];
-        $order->address = $r->input('address');
-        $order->status = 'Pendding';
-        $order->payment_method = $r->input('payment');
-        $order->save();
-
-        }
-
-
-        $id=Session::get('useid');
-        $data = bookmanagment::where(['id' => $r->session()->get('addtocart')])->first();
-
-        $users = DB::table('carts')
-            ->join('bookmanagments', 'carts.book_id', '=', 'bookmanagments.id')
-            ->select('bookmanagments.*')
-            ->where('carts.user_id',$id)
-            ->get();
 
         $pdf = PDF::loadView('mail2',compact('users'));
 
@@ -171,7 +68,7 @@ class OrderController extends Controller
         $pdf->save($path."\ssxzx2.pdf");
         $data = array('name'=>'vikash','body'=>"test");
 
-        // $pdf = PDF::loadView('your_view_name', $data)->setPaper('a4');
+
         Mail::send('mail', compact('users'), function($message) use ($pdf){
                 $message->from('laraveltest572@gmail.com');
                 $message->to(Session::get('email'));
@@ -180,10 +77,6 @@ class OrderController extends Controller
                 $message->attachData($pdf->output(),'customer.pdf');
             });
             $result = cart::where(['user_id'=> Session::get('useid')])->delete();
-        // $data = array('name'=>'vikash','body'=>"test");
-
-        // Mail::to('laraveltest572@gmail.com')->send(new SendMail($data));
-
 
 
         return redirect('/user/vieworder');
@@ -194,18 +87,11 @@ class OrderController extends Controller
     {
 
         $id=Session::get('useid');
+        $users = $this->order->userorder($id);
 
-        $users = DB::table('orders')
-            ->join('bookmanagments', 'orders.book_id', '=', 'bookmanagments.id')
-            ->select('bookmanagments.*','orders.*')
-            ->where('orders.user_id',$id)
-            ->get();
-
-//            dd($users);
 
             $pdf = PDF::loadView('user.orderspdf',compact('users'));
 
-            // $path = storage_path('test');
 
 
 

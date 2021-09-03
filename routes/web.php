@@ -92,12 +92,14 @@ Route::post('/admin/updatebook/{id}',[BookmanagmentController::class, 'update'])
 
 Route::get('/admin/deletebook/{id}',[BookmanagmentController::class, 'destroy']);
 
-Route::get('/admin/bookhistory',[BookmanagmentController::class, 'bookhistory']);
+
 
 Route::get('/logout', function() {
     session()->forget('email');
     session()->forget('role');
     session()->forget('username');
+    session()->get('addtocart');
+
     return redirect('');
 });
 
@@ -180,7 +182,7 @@ Route::get('admin/editrecord/{id}',[BookrecordController::class, 'edit']);
 
 Route::post('admin/editrecord/{id}',[BookrecordController::class, 'update']);
 
-Route::get('admin/bookhistory',[BookrecordController::class, 'bookhistory']);
+
 
 Route::get('admin/returneditbookrecord/{id}',[BookrecordController::class, 'retunedit']);
 
