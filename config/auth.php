@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'check' => [
+            'driver' => 'session',
+            'provider' => 'checks',
+        ],
+
 
         'api' => [
             'driver' => 'token',
@@ -70,6 +75,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'checks' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\registermaster::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -99,6 +108,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+
     ],
 
     /*

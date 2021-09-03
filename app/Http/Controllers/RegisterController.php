@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\registermaster;
+use App\Models\user;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use validate;
 use Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
+
 
 class RegisterController extends Controller
 {
+    public function __construct(registermaster $register)
+    {
+        $this->register = $register;
+    }
+
     function UserAuth(request $r)
     {
 
@@ -20,23 +28,30 @@ class RegisterController extends Controller
             'password'  =>  'required|alphaNum|min:3'
         ]);
 
-        $result = registermaster::where(['username'=> $r->input('email'),'password' => $r->input('password')])->first();
+        $result = $this->register->login($r->input());
 
         if($result){
+            $r->session()->put('email',$r->input('email'));
+            $r->session()->put('role',$result->role);
 
             if($result->role == 2){
-
-                $r->session()->put('email',$r->input('email'));
-                $r->session()->put('role',$result->role);
-
-                // Cookie::make('name', $r->input('email'), 15);
-
-
+                $r->session()->put('admin',$r->email);
                 return redirect('/admin/dashboard');
+
+            }
+            elseif($result->role == 1){
+
+                $userresult = user::where(['email'=> $r->input('email')])->first();
+                $r->session()->put('username',$userresult->name);
+                $r->session()->put('useid',$userresult->id);
+
+                return redirect('/user/dashboard2');
             }
 
         }
+
         else{
+
             return redirect('/')->with('errors','Email or Password Wrong');
         }
 
@@ -50,19 +65,17 @@ class RegisterController extends Controller
             'confirmpass' =>  'required|min:5'
         ]);
 
-        $result = registermaster::where(['password' => $r->input('oldpass')])->first();
+
+        $result = $this->register->checkdata($r->input());
 
         if($result){
 
             if($r->input('newpass') == $r->input('confirmpass'))
             {
-                registermaster::where('password',$r->input('oldpass'))->update([
-                    'password'=> $r->input('confirmpass')
-                ]);
 
-                // dd(registermaster::where('password',$r->input('oldpass'))->update(['password'=> $r->input('confirmpass')],['username'=> 'admin@admin']));
+                 $this->register->updatedata($r->input());
 
-                return redirect('/admin/changepassword')->with('errors','Change Password SuccessFully');
+                return redirect('/admin/changepassword')->with('success','Change Password SuccessFully');
             }
             else{
                 return redirect('/admin/changepassword')->with('errors','Invalid Confirm Password');
@@ -72,5 +85,6 @@ class RegisterController extends Controller
         }
         return $r->input();
     }
+
 
 }
